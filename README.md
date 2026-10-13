@@ -1,14 +1,16 @@
-# Laravel Product CRUD
+# Laravel Product CRUD with Authentication
 
-A basic product CRUD application built with Laravel.
+A product CRUD application built with Laravel and Laravel Breeze authentication.
 
 ## Features
 
+- User registration, login, logout, password reset, email verification, and profile management
 - List products
 - Create products
 - Edit products
 - Delete products
-- Feature tests for product CRUD operations
+- Authenticated access to product CRUD operations
+- Feature tests for authentication and product CRUD operations
 
 ## Requirements
 
@@ -31,6 +33,8 @@ php artisan serve
 ```
 
 Open `http://127.0.0.1:8000` in your browser.
+
+Register an account or log in, then select **Manage products** from the dashboard.
 
 ## Testing
 

@@ -1,152 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9fafb;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        }
-        .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        h1 {
-            margin: 0;
-            color: #1f2937;
-        }
-        .btn-create {
-            display: inline-block;
-            background-color: #10b981;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .btn-create:hover {
-            background-color: #059669;
-        }
-        .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #e5e7eb;
-            padding: 12px 14px;
-            text-align: left;
-        }
-        th {
-            background-color: #f3f4f6;
-            color: #374151;
-            font-weight: 600;
-        }
-        tr:hover {
-            background-color: #f9fafb;
-        }
-        .btn-edit {
-            color: #2563eb;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .btn-edit:hover {
-            text-decoration: underline;
-        }
-        .btn-delete {
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        .btn-delete:hover {
-            background-color: #dc2626;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 30px;
-            color: #6b7280;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header-bar">
-            <h1>Product List</h1>
-            <a href="{{route('product.create')}}" class="btn-create">+ Create a Product</a>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                {{ __('Product List') }}
+            </h2>
+            <a href="{{ route('product.create') }}"
+               class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                {{ __('Create a Product') }}
+            </a>
         </div>
+    </x-slot>
 
-        <div>
-            @if(session()->has('success'))
-                <div class="alert-success">
-                    {{session('success')}}
+    <div class="py-12">
+        <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+            @if(session('success'))
+                <div class="rounded-lg bg-green-100 p-4 text-sm font-medium text-green-800 dark:bg-green-900/40 dark:text-green-200">
+                    {{ session('success') }}
                 </div>
             @endif
-        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($products as $product)
-                    <tr>
-                        <td>{{$product->id}}</td>
-                        <td>{{$product->name}}</td>
-                        <td>{{$product->qty}}</td>
-                        <td>₱{{number_format($product->price, 2)}}</td>
-                        <td>{{$product->description}}</td>
-                        <td>
-                            <a href="{{route('product.edit', ['product' => $product])}}" class="btn-edit">Edit</a>
-                        </td>
-                        <td>
-                            <form method="post" action="{{route('product.destroy', ['product' => $product])}}" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                @csrf
-                                @method('delete')
-                                <input type="submit" value="Delete" class="btn-delete" />
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="empty-state">No products found. Click "Create a Product" to add one!</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                <div class="overflow-x-auto p-6 text-gray-900 dark:text-gray-100">
+                    <table class="w-full min-w-[700px] table-fixed text-left text-sm">
+                        <thead class="border-b border-gray-200 text-xs uppercase text-gray-500 dark:border-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th class="w-[8%] px-4 py-3 text-center">ID</th>
+                                <th class="w-[18%] px-4 py-3 !text-left">Name</th>
+                                <th class="w-[14%] px-4 py-3 text-center">Quantity</th>
+                                <th class="w-[16%] px-4 py-3 text-right">Price</th>
+                                <th class="w-[29%] px-4 py-3 !text-left">Description</th>
+                                <th class="w-[15%] px-4 py-3 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($products as $product)
+                                <tr class="transition-colors hover:bg-gray-700/50">
+                                    <td class="px-4 py-4 text-center">{{ $product->id }}</td>
+                                    <td class="px-4 py-4 text-left font-medium">{{ $product->name }}</td>
+                                    <td class="px-4 py-4 text-center">{{ $product->qty }}</td>
+                                    <td class="px-4 py-4 text-right">₱{{ number_format($product->price, 2) }}</td>
+                                    <td class="truncate px-4 py-4 text-left" title="{{ $product->description ?: '' }}">{{ $product->description ?: '—' }}</td>
+                                    <td class="px-4 py-4 text-center">
+                                        <div class="flex items-center justify-center gap-3">
+                                            <a href="{{ route('product.edit', ['product' => $product]) }}"
+                                               class="font-medium text-indigo-600 hover:underline dark:text-indigo-400">
+                                                {{ __('Edit') }}
+                                            </a>
+                                            <form method="post" action="{{ route('product.destroy', ['product' => $product]) }}"
+                                                  onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="font-medium text-red-600 hover:underline dark:text-red-400">
+                                                    {{ __('Delete') }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
+                                        {{ __('No products found. Create your first product to get started.') }}
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</x-app-layout>
