@@ -36,6 +36,37 @@ Open `http://127.0.0.1:8000` in your browser.
 
 Register an account or log in, then select **Manage products** from the dashboard.
 
+## Mailtrap password-reset testing
+
+The application is configured to use SMTP in `.env.example` for Mailtrap Email
+Testing. To enable it locally:
+
+1. Create a Mailtrap account and an Email Testing inbox.
+2. Open the inbox's SMTP credentials and copy its Laravel or SMTP credentials.
+3. Put the credentials in your local `.env` file:
+
+```env
+MAIL_MAILER=smtp
+MAIL_SCHEME=tls
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your-mailtrap-username
+MAIL_PASSWORD=your-mailtrap-password
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+4. Clear the cached configuration:
+
+```bash
+php artisan config:clear
+```
+
+5. Open `/forgot-password`, submit a registered email address, and inspect the
+   message in the Mailtrap inbox.
+
+Keep the Mailtrap username and password only in `.env`; never commit them.
+
 ## Testing
 
 ```bash
